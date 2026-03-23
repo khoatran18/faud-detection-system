@@ -1,0 +1,11 @@
+# python=3.10
+pyspark==3.5.1
+matplotlib
+scikit-learn
+numpy
+pandas
+pyarrow
+confluent-kafka
+xgboost
+seaborn
+dotenv
