@@ -41,8 +41,17 @@ class ClickhouseSettings(BaseModel):
     native_driver: str
     tables: ClickhouseTablesSettings
 
+## MinIO Settings
+class MinioSettings(BaseModel):
+    minio_endpoint: str
+    minio_endpoint_sdk: str
+    minio_access_key: str
+    minio_secret_key: str
+    core_bucket: str
+
 class StorageSettings(BaseModel):
     clickhouse: ClickhouseSettings
+    delta_lake: MinioSettings
 
 class Settings(BaseModel):
     kafka: KafkaSettings

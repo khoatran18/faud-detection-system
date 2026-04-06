@@ -17,7 +17,7 @@ def read_kafka_stream(
 
     return (spark.readStream
                 .format("kafka") \
-                .option("kafka.bootstrap.servers", settings.sources.kafka.server.bootstrap_servers) \
+                .option("kafka.bootstrap.servers", settings.kafka.server.bootstrap_servers) \
                 .option("subscribe", topic) \
                 .option("startingOffsets", "latest") \
                 .option("kafka.isolation.level", "read_committed") \

@@ -10,14 +10,14 @@ from stream_layer.ingestion.kafka_client import KafkaProducer
 DATA_TYPE = "test"
 DATA_PATH = Path(__file__).parent / "data" / "ingest" / f"{DATA_TYPE}_merged.csv"
 
-def main():
+def run_producer():
 
     # Init logging and Kafka producer
     setup_logging()
     logger = logging.getLogger(__name__)
     settings = load_settings()
     kafka_producer = KafkaProducer(settings=settings)
-    logger.info("Start ingestion")
+    logger.info("Start ingestion...")
 
     try:
         topic = settings.kafka.topics.topic
@@ -43,4 +43,4 @@ def main():
         logger.error("Error when ingestion: %s", e)
 
 if __name__ == "__main__":
-    main()
+    run_producer()
