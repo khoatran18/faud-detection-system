@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS predictions.fraud_prediction (
     TransactionID UInt64,
     prediction Nullable(Float64),
     probability Array(Float64),
+    process_timestamp DateTime,
+    model_id String,
     C1 Nullable(Float64),
     C10 Nullable(Float64),
     C11 Nullable(Float64),
@@ -426,5 +428,16 @@ CREATE TABLE IF NOT EXISTS predictions.fraud_prediction (
     id_37 Nullable(Float64),
     id_38 Nullable(Float64)
 )
-ENGINE = MergeTree()
+ENGINE = ReplacingMergeTree(process_timestamp)
+ORDER BY TransactionID;
+
+CREATE TABLE IF NOT EXISTS predictions.model_monitor (
+    TransactionID Int64,
+    model_id String,
+    model_predict Int8,
+    actual_result Int8,
+    is_correct UInt8,
+    process_timestamp DateTime
+)
+ENGINE = ReplacingMergeTree(process_timestamp)
 ORDER BY TransactionID;

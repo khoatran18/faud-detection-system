@@ -30,4 +30,4 @@ class ClickHouseSink:
             df.writeTo(f"clickhouse.{self.database}.{table_name}").append()
             logger.info("Finish writing to Clickhouse table: %s.%s", self.database, table_name)
         except Exception as e:
-            logger.error("Error when write to Clickhouse table: %s.%s", self.database, table_name)
+            logger.error("Error when write to Clickhouse table: %s.%s, %s", self.database, table_name, e)

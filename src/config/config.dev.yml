@@ -16,7 +16,9 @@ storage:
     jdbc_driver: "com.clickhouse.jdbc.ClickHouseDriver"
     native_driver: "com.clickhouse.spark.ClickHouseCatalog"
     database: "predictions"
-    table: fraud_prediction
+    table:
+      main_table: fraud_prediction
+      monitor_table: model_monitor
 
   delta_lake:
     minio_endpoint: "http://localhost:9000"

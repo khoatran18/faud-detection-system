@@ -26,6 +26,10 @@ class KafkaSettings(BaseModel):
 ### Storage Settings
 
 ## Clickhouse Settings
+class ClickhouseTableSettings(BaseModel):
+    main_table: str
+    monitor_table: str
+
 class ClickhouseSettings(BaseModel):
     host: str
     port: int
@@ -34,7 +38,7 @@ class ClickhouseSettings(BaseModel):
     database: str
     jdbc_driver: str
     native_driver: str
-    table: str
+    table: ClickhouseTableSettings
 
 ## MinIO Settings
 class MinioSettings(BaseModel):
