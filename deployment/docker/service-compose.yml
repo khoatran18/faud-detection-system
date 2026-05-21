@@ -1,0 +1,18 @@
+services:
+  stream_ingestion:
+    image: khoatran2k4/project2:stream_ingestion
+    container_name: stream_ingestion
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  stream_processor:
+    image: khoatran2k4/project2:stream_processor
+    container_name: stream_processor
+    restart: unless-stopped
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge

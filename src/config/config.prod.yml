@@ -2,43 +2,33 @@ kafka:
   topics:
     topic: fraud_topic
   server:
-    bootstrap_servers: kafka-internal:9092
+    bootstrap_servers: broker1:29092
   producer:
     retries: 3
     max_buffer: 10
 
 storage:
   clickhouse:
-    host: "localhost"
+    host: "clickhouse"
     port: 8123
     username: "default"
     password: ""
     jdbc_driver: "com.clickhouse.jdbc.ClickHouseDriver"
     native_driver: "com.clickhouse.spark.ClickHouseCatalog"
-    database: "serving_layer"
-    tables:
-      movie: "movies"
-      person: "people"
-      tv_series: "tv_series"
+    database: "predictions"
+    table:
+      main_table: fraud_prediction
+      monitor_table: model_monitor
+
   delta_lake:
-    minio_endpoint: "http://minio-internal:9000"
+    minio_endpoint: "http://minio:9000"
+    minio_endpoint_sdk: "minio:9000"
     minio_access_key: "minio"
     minio_secret_key: "minio123"
-    target_name_folder:
-      movie: "movies"
-      tv_series: "tvseries"
-      person: "people"
-    tables:
-      bronze_layer:
-        valid_base_path: "s3a://deltalake/bronze/valid"
-        invalid_base_path: "s3a://deltalake/bronze/invalid"
-      silver_layer:
-        valid_base_path: "s3a://deltalake/silver/valid"
-        invalid_base_path: "s3a://deltalake/silver/invalid" # Not used yet
-    checkpoints:
-      write_to_delta:
-        valid_base_path: "s3a://deltalake/silver/to_delta/_checkpoints/_valid"
-        invalid_base_path: "s3a://deltalake/silver/to_delta/_checkpoints/_invalid" # Not used yet
-      write_to_clickhouse:
-        valid_base_path: "s3a://deltalake/silver/to_clickhouse/_checkpoints/_valid"
-        invalid_base_path: "s3a://deltalake/silver/to_clickhouse/_checkpoints/_invalid" # Not used yet
+    core_bucket: "deltalake"
+
+model:
+  model_1:
+    id: model_1
+  model_2:
+    id: model_2

@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from pyspark.ml.classification import GBTClassificationModel
 from pyspark.sql.functions import lit, current_timestamp
@@ -13,8 +14,8 @@ from config.settings import load_settings
 from stream_layer.stream_processor.processor.event_prediction import event_prediction
 from stream_layer.stream_processor.processor.event_processor import event_processor
 
-MODEL_PATH = "../../model_ml/model/gbt_model"
-MODEL_ID = "model_1"
+MODEL_PATH = Path(__file__).parent.parent.parent / "model_ml" / "model" / "gbt_model"
+MODEL_NUMBER = 1
 
 def run_stream():
     # Init logging and Kafka producer
@@ -22,6 +23,11 @@ def run_stream():
     logger = logging.getLogger(__name__)
     settings = load_settings()
     logger.info("Start stream processor...")
+
+    if MODEL_NUMBER == 1:
+        model_id = settings.model.model_1.id
+    else:
+        model_id = settings.model.model_2.id
 
     try:
         init_clickhouse()
@@ -36,7 +42,7 @@ def run_stream():
         # preprocess_df = event_processor(raw_df)
 
         # Predict
-        model = GBTClassificationModel.load(MODEL_PATH)
+        model = GBTClassificationModel.load(str(MODEL_PATH))
         # prediction_df = event_prediction(preprocess_df, model)
 
         def process_batch(batch_df, batch_id):
@@ -49,7 +55,7 @@ def run_stream():
 
                 prediction_df.select("TransactionID", "prediction", "probability").show(truncate=False)
 
-                prediction_df.withColumn("model_id", lit(MODEL_ID)) \
+                prediction_df.withColumn("model_id", lit(model_id)) \
                     .withColumn("process_timestamp", current_timestamp())
 
                 clickhouse_writer.write_table(prediction_df, settings.storage.clickhouse.table.main_table)

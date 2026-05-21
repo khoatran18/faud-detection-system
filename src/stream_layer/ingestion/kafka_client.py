@@ -22,6 +22,7 @@ class KafkaProducer:
             'retries': settings.kafka.producer.retries
         }
 
+        logger.info("Kafka Producer config: %s", conf)
         self.producer = Producer(conf)
         logger.info("Kafka Producer initialized")
 

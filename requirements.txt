@@ -9,3 +9,10 @@ confluent-kafka
 xgboost
 seaborn
 dotenv
+python-dotenv
+datasets
+tqdm
+pydantic
+pyaml
+clickhouse-connect
+minio

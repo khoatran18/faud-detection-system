@@ -52,9 +52,23 @@ class StorageSettings(BaseModel):
     clickhouse: ClickhouseSettings
     delta_lake: MinioSettings
 
+## Model Settings
+class Model1Settings(BaseModel):
+    id: str
+
+class Model2Settings(BaseModel):
+    id: str
+
+class ModelSettings(BaseModel):
+    model_1: Model1Settings
+    model_2: Model2Settings
+
+## Full Settings
 class Settings(BaseModel):
     kafka: KafkaSettings
     storage: StorageSettings
+    model: ModelSettings
+
 
 def load_settings() -> Settings:
     """

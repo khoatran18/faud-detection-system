@@ -26,3 +26,9 @@ storage:
     minio_access_key: "minio"
     minio_secret_key: "minio123"
     core_bucket: "deltalake"
+
+model:
+  model_1:
+    id: model_1
+  model_2:
+    id: model_2
