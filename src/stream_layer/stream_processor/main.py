@@ -55,7 +55,7 @@ def run_stream():
 
                 prediction_df.select("TransactionID", "prediction", "probability").show(truncate=False)
 
-                prediction_df.withColumn("model_id", lit(model_id)) \
+                prediction_df = prediction_df.withColumn("model_id", lit(model_id)) \
                     .withColumn("process_timestamp", current_timestamp())
 
                 clickhouse_writer.write_table(prediction_df, settings.storage.clickhouse.table.main_table)

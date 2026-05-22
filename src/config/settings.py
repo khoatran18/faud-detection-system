@@ -32,7 +32,8 @@ class ClickhouseTableSettings(BaseModel):
 
 class ClickhouseSettings(BaseModel):
     host: str
-    port: int
+    port: int           # HTTP port (8123)
+    native_port: int = 9000    # Native TCP port for clickhouse-driver
     username: str
     password: str
     database: str
@@ -63,11 +64,18 @@ class ModelSettings(BaseModel):
     model_1: Model1Settings
     model_2: Model2Settings
 
+## Web Dashboard Settings
+class WebSettings(BaseModel):
+    scan_interval_seconds: int = 10
+    host: str = "0.0.0.0"
+    port: int = 8000
+
 ## Full Settings
 class Settings(BaseModel):
     kafka: KafkaSettings
     storage: StorageSettings
     model: ModelSettings
+    web: WebSettings = WebSettings()
 
 
 def load_settings() -> Settings:
