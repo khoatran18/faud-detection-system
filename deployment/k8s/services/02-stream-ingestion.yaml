@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stream-ingestion
+  namespace: fraud-prediction-platform
+  labels:
+    app: stream-ingestion
+spec:
+  selector:
+    matchLabels:
+      app: stream-ingestion
+  template:
+    metadata:
+      labels:
+        app: stream-ingestion
+    spec:
+      containers:
+        - name: stream-ingestion
+          image: khoa2k4/project2:stream_ingestion
+          imagePullPolicy: Always
+          env:
+            - name: APP_ENV
+              value: prod
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "3Gi"
+              cpu: "2"

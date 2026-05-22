@@ -1,15 +1,31 @@
 services:
   stream_ingestion:
-    image: khoatran2k4/project2:stream_ingestion
+    image: khoa2k4/project2:stream_ingestion
     container_name: stream_ingestion
     restart: unless-stopped
     networks:
       - test-network
 
   stream_processor:
-    image: khoatran2k4/project2:stream_processor
+    image: khoa2k4/project2:stream_processor
     container_name: stream_processor
     restart: unless-stopped
+    networks:
+      - test-network
+
+  monitor_ingestion:
+    image: khoa2k4/project2:stream_monitor
+    container_name: monitor_ingestion
+    restart: unless-stopped
+    command: ["python", "-m", "model_monitor.monitor_ingestion"]
+    networks:
+      - test-network
+
+  monitor_processor:
+    image: khoa2k4/project2:stream_monitor
+    container_name: monitor_processor
+    restart: unless-stopped
+    command: ["python", "-m", "model_monitor.monitor_stream_processor"]
     networks:
       - test-network
 

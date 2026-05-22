@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitor-ingestion
+  namespace: fraud-prediction-platform
+  labels:
+    app: monitor-ingestion
+spec:
+  selector:
+    matchLabels:
+      app: monitor-ingestion
+  template:
+    metadata:
+      labels:
+        app: monitor-ingestion
+    spec:
+      containers:
+        - name: monitor-ingestion
+          image: khoa2k4/project2:monitor_ingestion
+          imagePullPolicy: Always
+          env:
+            - name: APP_ENV
+              value: prod
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "3Gi"
+              cpu: "2"
