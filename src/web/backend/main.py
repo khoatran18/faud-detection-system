@@ -157,8 +157,20 @@ async def websocket_endpoint(ws: WebSocket):
         logger.info("WebSocket client disconnected.")
 
 
+# ──────────────────────────── Static Files ──────────────────────────────
+
+from fastapi.staticfiles import StaticFiles
+import os
+
+frontend_dist = os.path.join(os.path.dirname(__file__), "../frontend/dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")
+    logger.info("Mounted frontend static files from: %s", frontend_dist)
+
+
 # ──────────────────────────── Entry point ───────────────────────────────
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host=WEB_HOST, port=WEB_PORT, reload=True)
+

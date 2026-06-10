@@ -2,16 +2,17 @@ kafka:
   topics:
     topic: fraud_topic
   server:
-    bootstrap_servers: broker1:29092
+    bootstrap_servers: kafka-internal.fpp.svc.cluster.local:29092
   producer:
     retries: 3
     max_buffer: 10
 
 storage:
   clickhouse:
-    host: "clickhouse"
+    host: "clickhouse-internal.fpp.svc.cluster.local"
     port: 8123
-    username: "default"
+    native_port: 9000       # native TCP port
+    username: "fpp_user"
     password: ""
     jdbc_driver: "com.clickhouse.jdbc.ClickHouseDriver"
     native_driver: "com.clickhouse.spark.ClickHouseCatalog"
@@ -21,8 +22,8 @@ storage:
       monitor_table: model_monitor
 
   delta_lake:
-    minio_endpoint: "http://minio:9000"
-    minio_endpoint_sdk: "minio:9000"
+    minio_endpoint: "http://minio-internal.fpp.svc.cluster.local:9000"
+    minio_endpoint_sdk: "minio-internal.fpp.svc.cluster.local:9000"
     minio_access_key: "minio"
     minio_secret_key: "minio123"
     core_bucket: "deltalake"

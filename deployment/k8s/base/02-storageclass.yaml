@@ -3,4 +3,5 @@ kind: StorageClass
 metadata:
   name: my-storage-class
 provisioner: k8s.io/minikube-hostpath
+# provisioner: rancher.io/local-path
 reclaimPolicy: Delete

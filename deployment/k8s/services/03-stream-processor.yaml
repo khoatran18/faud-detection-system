@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: stream-processor
-  namespace: fraud-prediction-platform
+  namespace: fpp
   labels:
     app: stream-processor
 spec:
@@ -17,7 +17,7 @@ spec:
       containers:
         - name: stream-processor
           image: khoa2k4/project2:stream_processor
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: APP_ENV
               value: prod

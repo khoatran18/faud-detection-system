@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: monitor-ingestion
-  namespace: fraud-prediction-platform
+  namespace: fpp
   labels:
     app: monitor-ingestion
 spec:
@@ -16,8 +16,9 @@ spec:
     spec:
       containers:
         - name: monitor-ingestion
-          image: khoa2k4/project2:monitor_ingestion
-          imagePullPolicy: Always
+          image: khoa2k4/project2:stream_monitor
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "model_monitor.monitor_ingestion"]
           env:
             - name: APP_ENV
               value: prod

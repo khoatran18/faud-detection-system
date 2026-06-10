@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: clickhouse-headless
-  namespace: fraud-prediction-platform
+  namespace: fpp
 spec:
   clusterIP: None
   selector:
@@ -20,7 +20,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: clickhouse-internal
-  namespace: fraud-prediction-platform
+  namespace: fpp
 spec:
   selector:
     app: clickhouse
@@ -38,7 +38,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tabix-external
-  namespace: fraud-prediction-platform
+  namespace: fpp
 spec:
   selector:
     app: tabix
@@ -50,11 +50,33 @@ spec:
   type: NodePort
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clickhouse-users-config
+  namespace: fpp
+data:
+  fpp-user.xml: |
+    <clickhouse>
+      <users>
+        <fpp_user>
+          <password></password>
+          <networks>
+            <ip>::/0</ip>
+          </networks>
+          <profile>default</profile>
+          <quota>default</quota>
+          <access_management>1</access_management>
+        </fpp_user>
+      </users>
+    </clickhouse>
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tabix-deployment
-  namespace: fraud-prediction-platform
+  namespace: fpp
   labels:
     app: tabix
 spec:
@@ -77,7 +99,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: clickhouse
-  namespace: fraud-prediction-platform
+  namespace: fpp
   labels:
     app: clickhouse
 spec:
@@ -101,6 +123,9 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/clickhouse
               name: clickhouse-storage
+            - mountPath: /etc/clickhouse-server/users.d/fpp-user.xml
+              name: clickhouse-users-config
+              subPath: fpp-user.xml
           readinessProbe:
             httpGet:
               path: /ping
@@ -123,6 +148,11 @@ spec:
               cpu: "2"
               memory: "4Gi"
 
+      volumes:
+        - name: clickhouse-users-config
+          configMap:
+            name: clickhouse-users-config
+
   volumeClaimTemplates:
     - metadata:
         name: clickhouse-storage
@@ -139,7 +169,7 @@ spec:
 #kind: Deployment
 #metadata:
 #  name: clickhouse-deployment
-#  namespace: fraud-prediction-platform
+#  namespace: fpp
 #  labels:
 #    app: clickhouse
 #spec:
@@ -170,7 +200,7 @@ spec:
 #kind: PersistentVolumeClaim
 #metadata:
 #  name: clickhouse-pvc
-#  namespace: fraud-prediction-platform
+#  namespace: fpp
 #spec:
 #  storageClassName: my-storage-class
 #  accessModes:

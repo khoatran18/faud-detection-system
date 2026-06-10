@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: monitor-processor
-  namespace: fraud-prediction-platform
+  namespace: fpp
   labels:
     app: monitor-processor
 spec:
@@ -16,8 +16,9 @@ spec:
     spec:
       containers:
         - name: monitor-processor
-          image: khoa2k4/project2:monitor_processor
-          imagePullPolicy: Always
+          image: khoa2k4/project2:stream_monitor
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "model_monitor.monitor_stream_processor"]
           env:
             - name: APP_ENV
               value: prod
