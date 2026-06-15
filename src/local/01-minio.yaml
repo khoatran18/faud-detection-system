@@ -63,7 +63,7 @@ metadata:
     app: minio
 spec:
   serviceName: minio-headless
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: minio
@@ -79,7 +79,7 @@ spec:
             - server
             - --console-address
             - ":9001"
-            - "/data"
+            - "http://minio-{0...3}.minio-headless.fpp.svc.cluster.local:9000/data"
           env:
             - name: MINIO_ROOT_USER
               valueFrom:

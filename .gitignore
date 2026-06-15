@@ -211,3 +211,5 @@ __marimo__/
 
 *-secret.yaml
 **/node_modules/*
+
+**/train_data/*

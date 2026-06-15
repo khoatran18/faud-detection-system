@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minio-bootstrap-data
+  namespace: fpp
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: data-loader
+          image: minio/mc:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              until mc alias set myminio http://minio-internal:9000 minio minio123; do
+                echo "MinIO server chưa sẵn sàng, đang thử lại sau 2 giây..."
+                sleep 2
+              done
+              
+              echo "Tạo bucket fraud-detection..."
+              mc mb --ignore-existing myminio/fraud-detection;
+              
+              echo "Đang upload dữ liệu từ thư mục mount vào MinIO..."
+              mc cp /local-data/train_identity.csv myminio/fraud-detection/raw/;
+              mc cp /local-data/train_transaction.csv myminio/fraud-detection/raw/;
+              
+              echo "Nạp dữ liệu hoàn tất thành công!"
+          volumeMounts:
+            - name: raw-local-csv
+              mountPath: /local-data # Thư mục bên trong Pod nhận dữ liệu
+      volumes:
+        - name: raw-local-csv
+          hostPath:
+            path: /data/train_data
+            type: Directory
